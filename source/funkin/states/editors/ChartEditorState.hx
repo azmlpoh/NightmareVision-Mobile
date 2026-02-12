@@ -581,6 +581,8 @@ class ChartEditorState extends MusicBeatState
 		
 		updateGrid();
 		
+		addTouchPad("LEFT_FULL", "A_B_C_D_V_X_Y_Z");
+		addTouchPadCamera();
 		super.create();
 	}
 	
@@ -2324,7 +2326,7 @@ class ChartEditorState extends MusicBeatState
 		
 		if (!blockInput)
 		{
-			if (FlxG.keys.justPressed.ENTER)
+			if (touchPad.buttonC.justPressed)
 			{
 				enterSong();
 			}
@@ -2341,7 +2343,7 @@ class ChartEditorState extends MusicBeatState
 				}
 			}
 			
-			if (FlxG.keys.justPressed.BACKSPACE)
+			if (controls.BACK)
 			{
 				PlayState.chartingMode = false;
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
@@ -2468,7 +2470,7 @@ class ChartEditorState extends MusicBeatState
 			
 			if (!vortex)
 			{
-				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
+				if (touchPad.buttonUP.justPressed || touchPad.buttonDOWN.justPressed)
 				{
 					FlxG.sound.music.pause();
 					
@@ -2477,7 +2479,7 @@ class ChartEditorState extends MusicBeatState
 					var beat:Float = curDecBeat;
 					var snap:Float = quantization / 4;
 					var increase:Float = 1 / snap;
-					if (FlxG.keys.pressed.UP)
+					if (touchPad.buttonUP.justPressed)
 					{
 						var fuck:Float = MathUtil.quantize(beat, snap) - increase; // (Math.floor((beat+snap) / snap) * snap);
 						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
@@ -2503,7 +2505,7 @@ class ChartEditorState extends MusicBeatState
 			
 			if (!blockInput)
 			{
-				if (FlxG.keys.justPressed.RIGHT)
+				if (touchPad.buttonRIGHT.justPressed)
 				{
 					curQuant++;
 					if (curQuant > quantizations.length - 1) curQuant = 0;
@@ -2511,7 +2513,7 @@ class ChartEditorState extends MusicBeatState
 					quantization = quantizations[curQuant];
 				}
 				
-				if (FlxG.keys.justPressed.LEFT)
+				if (touchPad.buttonLEFT.justPressed)
 				{
 					curQuant--;
 					if (curQuant < 0) curQuant = quantizations.length - 1;
@@ -2539,7 +2541,7 @@ class ChartEditorState extends MusicBeatState
 				}
 				
 				var feces:Float;
-				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
+				if (touchPad.buttonUP.justPressed || touchPad.buttonDOWN.justPressed)
 				{
 					FlxG.sound.music.pause();
 					
@@ -2551,7 +2553,7 @@ class ChartEditorState extends MusicBeatState
 					var beat:Float = curDecBeat;
 					var snap:Float = quantization / 4;
 					var increase:Float = 1 / snap;
-					if (FlxG.keys.pressed.UP)
+					if (touchPad.buttonUP.justPressed)
 					{
 						var fuck:Float = MathUtil.quantize(beat, snap) - increase;
 						feces = Conductor.beatToSeconds(fuck);
@@ -2615,7 +2617,7 @@ class ChartEditorState extends MusicBeatState
 				}
 			}
 		}
-		else if (FlxG.keys.justPressed.ENTER)
+		else if (touchPad.buttonC.justPressed)
 		{
 			for (i in 0...blockPressWhileTypingOn.length)
 			{
@@ -3876,7 +3878,7 @@ class ChartEditorState extends MusicBeatState
 		try
 		{
 			final songName = Paths.sanitize(song);
-			PlayState.SONG = Chart.fromPath(Paths.json('$songName/data/${Difficulty.getDifficultyFilePath()}'));
+			PlayState.SONG = Chart.fromPath(Paths.json('$songName/${Difficulty.getDifficultyFilePath()}'));
 		}
 		catch (e)
 		{

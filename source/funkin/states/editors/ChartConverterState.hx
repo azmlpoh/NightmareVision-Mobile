@@ -86,6 +86,8 @@ class ChartConverterState extends MusicBeatState
 		}
 		
 		changeSel();
+		addTouchPad("UP_DOWN", "A_B");
+		addTouchPadCamera();
 	}
 	
 	override function update(elapsed:Float)
