@@ -190,6 +190,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		pointerBounds.alpha = 0;
 		
 		addTouchPad("LEFT_FULL", "A_B_X_Y");
+		addTouchPadCamera();
 	}
 	
 	function exitState()
@@ -969,22 +970,22 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		final moveDistance = FlxG.keys.pressed.SHIFT ? 10 : 1;
 		
-		if (FlxG.keys.justPressed.LEFT)
+		if (controls.UI_LEFT_P)
 		{
 			character.offset.x += moveDistance;
 			return true;
 		}
-		else if (FlxG.keys.justPressed.DOWN)
+		else if (controls.UI_DOWN_P)
 		{
 			character.offset.y -= moveDistance;
 			return true;
 		}
-		else if (FlxG.keys.justPressed.UP)
+		else if (controls.UI_UP_P)
 		{
 			character.offset.y += moveDistance;
 			return true;
 		}
-		else if (FlxG.keys.justPressed.RIGHT)
+		else if (controls.UI_RIGHT_P)
 		{
 			character.offset.x -= moveDistance;
 			return true;
@@ -1059,19 +1060,15 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			isCameraDragging = false;
 		}
 
-		if (FlxG.mouse.pressed)
+		if (FlxG.mouse.pressed && isCameraDragging)
 		{
-			if (!isCameraDragging && (Math.abs(FlxG.mouse.deltaX) > 10 || Math.abs(FlxG.mouse.deltaY) > 10))
-			{
+			var mult = FlxG.keys.pressed.SHIFT ? 2 : 1;
+			FlxG.camera.scroll.x -= FlxG.mouse.deltaX * mult * 0.5;
+			FlxG.camera.scroll.y -= FlxG.mouse.deltaY * mult * 0.5;
+		}
+		else if (FlxG.mouse.justMoved && !isCameraDragging && (Math.abs(FlxG.mouse.deltaX) > 10 || Math.abs(FlxG.mouse.deltaY) > 10))
+		{
 			isCameraDragging = true;
-			}
-
-			if (isCameraDragging)
-			{
-				var mult = FlxG.keys.pressed.SHIFT ? 2 : 1;
-				FlxG.camera.scroll.x -= FlxG.mouse.deltaX * mult * 0.5;
-				FlxG.camera.scroll.y -= FlxG.mouse.deltaY * mult * 0.5;
-			}
 		}
 
 		if (FlxG.mouse.justReleased)
