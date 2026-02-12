@@ -2470,7 +2470,7 @@ class ChartEditorState extends MusicBeatState
 			
 			if (!vortex)
 			{
-				if (touchPad.buttonUP.justPressed || touchPad.buttonDOWN.justPressed)
+				if (controls.UI_UP_P || controls.UI_DOWN_P)
 				{
 					FlxG.sound.music.pause();
 					
@@ -2479,7 +2479,7 @@ class ChartEditorState extends MusicBeatState
 					var beat:Float = curDecBeat;
 					var snap:Float = quantization / 4;
 					var increase:Float = 1 / snap;
-					if (touchPad.buttonUP.justPressed)
+					if (controls.UI_UP_P)
 					{
 						var fuck:Float = MathUtil.quantize(beat, snap) - increase; // (Math.floor((beat+snap) / snap) * snap);
 						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
@@ -2505,7 +2505,7 @@ class ChartEditorState extends MusicBeatState
 			
 			if (!blockInput)
 			{
-				if (touchPad.buttonRIGHT.justPressed)
+				if (controls.UI_RIGHT_P)
 				{
 					curQuant++;
 					if (curQuant > quantizations.length - 1) curQuant = 0;
@@ -2513,7 +2513,7 @@ class ChartEditorState extends MusicBeatState
 					quantization = quantizations[curQuant];
 				}
 				
-				if (touchPad.buttonLEFT.justPressed)
+				if (controls.UI_LEFT_P)
 				{
 					curQuant--;
 					if (curQuant < 0) curQuant = quantizations.length - 1;
@@ -2541,7 +2541,7 @@ class ChartEditorState extends MusicBeatState
 				}
 				
 				var feces:Float;
-				if (touchPad.buttonUP.justPressed || touchPad.buttonDOWN.justPressed)
+				if (controls.UI_UP_P || controls.UI_DOWN_P)
 				{
 					FlxG.sound.music.pause();
 					
@@ -2553,7 +2553,7 @@ class ChartEditorState extends MusicBeatState
 					var beat:Float = curDecBeat;
 					var snap:Float = quantization / 4;
 					var increase:Float = 1 / snap;
-					if (touchPad.buttonUP.justPressed)
+					if (controls.UI_UP_P)
 					{
 						var fuck:Float = MathUtil.quantize(beat, snap) - increase;
 						feces = Conductor.beatToSeconds(fuck);
