@@ -188,6 +188,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		pointerBounds = new DebugBounds(cameraPointer);
 		add(pointerBounds);
 		pointerBounds.alpha = 0;
+		
+		addTouchPad("LEFT_FULL", "A_B_X_Y");
 	}
 	
 	function exitState()
@@ -1052,40 +1054,43 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 	
 	function controlCamera(elapsed:Float)
 	{
-		if (FlxG.keys.pressed.E && FlxG.camera.zoom < 3)
+		if (FlxG.mouse.justPressed)
 		{
-			FlxG.camera.zoom += elapsed * FlxG.camera.zoom;
+			isCameraDragging = false;
 		}
-		if (FlxG.keys.pressed.Q && FlxG.camera.zoom > 0.1)
+
+		if (FlxG.mouse.pressed)
 		{
-			FlxG.camera.zoom -= elapsed * FlxG.camera.zoom;
-		}
-		
-		if (FlxG.mouse.justReleasedMiddle) isCameraDragging = false;
-		
-		if (ToolKitUtils.isHaxeUIHovered(camHUD) && !isCameraDragging) return;
-		
-		if (FlxG.mouse.justPressedMiddle)
-		{
+			if (!isCameraDragging && (Math.abs(FlxG.mouse.deltaX) > 10 || Math.abs(FlxG.mouse.deltaY) > 10))
+			{
 			isCameraDragging = true;
-			FlxG.sound.play(Paths.sound('ui/mouseMiddleClick'));
+			}
+
+			if (isCameraDragging)
+			{
+				var mult = FlxG.keys.pressed.SHIFT ? 2 : 1;
+				FlxG.camera.scroll.x -= FlxG.mouse.deltaX * mult * 0.5;
+				FlxG.camera.scroll.y -= FlxG.mouse.deltaY * mult * 0.5;
+			}
 		}
-		
-		if (FlxG.mouse.pressedMiddle && FlxG.mouse.justMoved)
+
+		if (FlxG.mouse.justReleased)
 		{
-			var mult = FlxG.keys.pressed.SHIFT ? 2 : 1;
-			FlxG.camera.scroll.x -= FlxG.mouse.deltaViewX * mult;
-			FlxG.camera.scroll.y -= FlxG.mouse.deltaViewY * mult;
+			isCameraDragging = false;
 		}
-		
-		if (FlxG.mouse.wheel != 0)
+
+		if (touchPad.buttonX.justPressed && FlxG.camera.zoom < 3)
 		{
-			FlxG.camera.zoom += FlxG.mouse.wheel * (0.1 * FlxG.camera.zoom);
+			FlxG.camera.zoom += 0.25;
 		}
-		
+		if (touchPad.buttonY.justPressed && FlxG.camera.zoom > 0.1)
+		{
+			FlxG.camera.zoom -= 0.25;
+		}
+
 		FlxG.camera.zoom = FlxMath.bound(FlxG.camera.zoom, 0.1, 6);
 	}
-	
+
 	function refreshCharDropDown() // rewrite this
 	{
 		var characterList:Array<String> = [];
